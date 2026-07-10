@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Programme Partenaire — L'Agent Humain</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --black: #000000;
+  --white: #FFFFFF;
+  --green: #00C57A;
+  --green-dark: #00875A;
+  --fire: #E94560;
+  --gold: #F5C518;
+  --paper: #fffef6;
+  --mid: #888899;
+  --light: #f5f5f0;
+  --navy: #333333;
+  --teal: #00607A;
+  --yellow: #fffef6;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--black);
+  color: var(--white);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* ── NOISE TEXTURE ── */
+body::before {
+  content: '';
+  position: fixed; inset: 0; z-index: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+}
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 1.25rem 3rem;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  background: rgba(0,0,0,0.95);
+  backdrop-filter: blur(12px);
+}
+
+.nav-logo {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.4rem;
+  color: var(--green);
+  letter-spacing: 0.15em;
+  text-decoration: none;
+}
+
+.nav-logo-img { display:flex; align-items:center; text-decoration:none; }
+
+.nav-link {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: rgba(255,255,255,0.6);
+  text-decoration: none;
+  letter-spacing: 0.04em;
+  transition: color 0.2s;
+}
+.nav-link:hover { color: var(--teal); }
+
+.nav-tag {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--mid);
+  border: 1px solid rgba(255,255,255,0.1);
+  padding: 0.35rem 0.8rem;
+}
+
+.nav-cta {
+  background: var(--teal);
+  color: var(--white);
+  font-weight: 700;
+  font-size: 0.82rem;
+  padding: 0.6rem 1.4rem;
+  text-decoration: none;
+  letter-spacing: 0.05em;
+  transition: background 0.2s;
+}
+.nav-cta:hover { background: var(--green); color: var(--black); }
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 8rem 3rem 5rem;
+  position: relative; overflow: hidden;
+}
+
+.hero-grid {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(0,96,122,0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,96,122,0.06) 1px, transparent 1px);
+  background-size: 80px 80px;
+  pointer-events: none;
+}
+
+.hero-glow {
+  position: absolute; top: -200px; right: -200px;
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(0,96,122,0.18) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero-kicker {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--teal);
+  margin-bottom: 1.5rem;
+  display: flex; align-items: center; gap: 0.75rem;
+  animation: fadeUp 0.6s ease both;
+}
+.hero-kicker::before {
+  content: '';
+  display: block; width: 32px; height: 1px;
+  background: var(--teal);
+}
+
+.hero-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(3.5rem, 9vw, 7.5rem);
+  line-height: 0.92;
+  letter-spacing: 0.02em;
+  max-width: 900px;
+  margin-bottom: 2rem;
+  animation: fadeUp 0.6s 0.1s ease both;
+}
+
+.hero-title .accent { color: var(--teal); }
+.hero-title .fire { color: var(--gold); }
+
+.hero-sub {
+  font-size: 1.15rem;
+  color: rgba(255,255,255,0.55);
+  max-width: 560px;
+  margin-bottom: 3rem;
+  font-weight: 300;
+  line-height: 1.7;
+  animation: fadeUp 0.6s 0.2s ease both;
+}
+
+.hero-actions {
+  display: flex; gap: 1rem; flex-wrap: wrap;
+  animation: fadeUp 0.6s 0.3s ease both;
+}
+
+.btn-primary {
+  background: var(--teal);
+  color: var(--white);
+  font-weight: 700;
+  font-size: 0.9rem;
+  padding: 0.9rem 2.2rem;
+  text-decoration: none;
+  letter-spacing: 0.05em;
+  transition: all 0.2s;
+  display: inline-flex; align-items: center; gap: 0.5rem;
+}
+.btn-primary:hover { background: var(--green); color: var(--black); transform: translateY(-2px); }
+
+.btn-secondary {
+  border: 1px solid rgba(255,255,255,0.2);
+  color: rgba(255,255,255,0.7);
+  font-size: 0.9rem;
+  padding: 0.9rem 2.2rem;
+  text-decoration: none;
+  letter-spacing: 0.05em;
+  transition: all 0.2s;
+}
+.btn-secondary:hover { border-color: var(--teal); color: var(--teal); }
+
+.hero-stats {
+  display: flex; gap: 4rem; flex-wrap: wrap;
+  padding-top: 4rem;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  margin-top: 4rem;
+  animation: fadeUp 0.6s 0.4s ease both;
+}
+
+.stat { display: flex; flex-direction: column; }
+.stat-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2.8rem;
+  color: var(--gold);
+  line-height: 1;
+}
+.stat-label {
+  font-size: 0.72rem;
+  color: var(--mid);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-top: 0.3rem;
+}
+
+/* ── SECTION BASE ── */
+section { position: relative; z-index: 1; }
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 3rem;
+}
+
+/* ── POURQUOI SECTION ── */
+.why-section {
+  background: var(--yellow);
+  padding: 6rem 0;
+}
+
+.why-section .section-kicker {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--teal);
+  margin-bottom: 0.75rem;
+  display: flex; align-items: center; gap: 0.6rem;
+}
+.why-section .section-kicker::before {
+  content: ''; display: block; width: 20px; height: 1px;
+  background: var(--teal);
+}
+
+.section-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(2.2rem, 5vw, 3.8rem);
+  line-height: 0.95;
+  letter-spacing: 0.02em;
+  margin-bottom: 1rem;
+}
+
+.why-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1px;
+  background: rgba(10,10,15,0.1);
+  border: 1px solid rgba(10,10,15,0.1);
+  margin-top: 3.5rem;
+}
+
+.why-card {
+  background: var(--yellow);
+  padding: 2.5rem 2rem;
+  position: relative; overflow: hidden;
+  transition: background 0.3s;
+}
+.why-card:hover { background: #fff; }
+
+.why-card::after {
+  content: '';
+  position: absolute; bottom: 0; left: 0;
+  width: 100%; height: 3px;
+  background: var(--teal);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform 0.35s ease;
+}
+.why-card:hover::after { transform: scaleX(1); }
+
+.why-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 4rem;
+  color: rgba(10,10,15,0.06);
+  line-height: 1;
+  margin-bottom: -0.75rem;
+}
+
+.why-title {
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--black);
+  margin-bottom: 0.6rem;
+}
+
+.why-desc {
+  font-size: 0.88rem;
+  color: #555;
+  line-height: 1.6;
+}
+
+/* ── COMMISSION SECTION ── */
+.commission-section {
+  background: #333333;
+  padding: 6rem 0;
+  overflow: hidden;
+}
+
+.commission-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5rem;
+  align-items: center;
+}
+
+.commission-left .section-kicker {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--teal);
+  margin-bottom: 0.75rem;
+  display: flex; align-items: center; gap: 0.6rem;
+}
+.commission-left .section-kicker::before {
+  content: ''; display: block; width: 20px; height: 1px;
+  background: var(--teal);
+}
+
+.commission-left .section-title { color: var(--white); margin-bottom: 1.5rem; }
+
+.commission-left p {
+  color: rgba(255,255,255,0.5);
+  font-size: 0.95rem;
+  line-height: 1.7;
+  margin-bottom: 2rem;
+  font-weight: 300;
+}
+
+.commission-card {
+  background: #000000;
+  border: 1px solid rgba(255,255,255,0.08);
+  padding: 2.5rem;
+}
+
+.commission-amount {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 5rem;
+  color: var(--gold);
+  line-height: 1;
+  margin-bottom: 0.25rem;
+}
+
+.commission-period {
+  font-size: 0.8rem;
+  color: var(--mid);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-bottom: 2rem;
+}
+
+.commission-divider {
+  width: 100%; height: 1px;
+  background: rgba(255,255,255,0.06);
+  margin: 1.5rem 0;
+}
+
+.commission-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.commission-row:last-child { border-bottom: none; }
+
+.cr-label { font-size: 0.82rem; color: var(--mid); }
+.cr-value { font-weight: 700; font-size: 0.9rem; color: var(--white); }
+.cr-value.highlight { color: var(--gold); }
+
+.commission-note {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background: rgba(0,96,122,0.08);
+  border-left: 3px solid var(--teal);
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.5);
+  line-height: 1.5;
+}
+
+/* ── HOW IT WORKS ── */
+.how-section {
+  background: var(--black);
+  padding: 6rem 0;
+}
+
+.how-section .section-kicker {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 0.75rem;
+  display: flex; align-items: center; gap: 0.6rem;
+}
+.how-section .section-kicker::before {
+  content: ''; display: block; width: 20px; height: 1px;
+  background: var(--gold);
+}
+
+.how-section .section-title { color: var(--white); margin-bottom: 1rem; }
+.how-section .section-sub {
+  color: rgba(255,255,255,0.4);
+  font-size: 0.95rem;
+  max-width: 480px;
+  font-weight: 300;
+  margin-bottom: 4rem;
+}
+
+.steps {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  position: relative;
+}
+
+.steps::before {
+  content: '';
+  position: absolute;
+  top: 2rem; left: 12.5%; right: 12.5%;
+  height: 1px;
+  background: linear-gradient(90deg, var(--teal), rgba(0,96,122,0.1));
+  z-index: 0;
+}
+
+.step {
+  padding: 0 1.5rem;
+  position: relative; z-index: 1;
+  text-align: center;
+}
+
+.step-num {
+  width: 4rem; height: 4rem;
+  background: var(--black);
+  border: 2px solid var(--teal);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.4rem;
+  color: var(--teal);
+  margin: 0 auto 1.5rem;
+  position: relative; z-index: 2;
+}
+
+.step-title {
+  font-weight: 700;
+  font-size: 0.92rem;
+  color: var(--white);
+  margin-bottom: 0.5rem;
+}
+
+.step-desc {
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.4);
+  line-height: 1.55;
+}
+
+/* ── COMPLEMENTARITY ── */
+.comp-section {
+  background: #333333;
+  padding: 6rem 0;
+}
+
+.comp-section .section-kicker {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 0.75rem;
+  display: flex; align-items: center; gap: 0.6rem;
+}
+.comp-section .section-kicker::before {
+  content: ''; display: block; width: 20px; height: 1px;
+  background: var(--gold);
+}
+.comp-section .section-title { color: var(--white); margin-bottom: 1rem; }
+.comp-section .section-sub {
+  color: rgba(255,255,255,0.4);
+  font-size: 0.95rem;
+  max-width: 520px;
+  font-weight: 300;
+  margin-bottom: 3.5rem;
+}
+
+.comp-grid {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 2rem;
+  align-items: center;
+}
+
+.comp-card {
+  border: 1px solid rgba(255,255,255,0.06);
+  padding: 2.5rem;
+}
+
+.comp-card-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+.comp-card.you .comp-card-label { color: var(--teal); }
+.comp-card.us .comp-card-label { color: var(--green); }
+
+.comp-card-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  color: var(--white);
+}
+
+.comp-list {
+  list-style: none;
+  display: flex; flex-direction: column; gap: 0.6rem;
+}
+.comp-list li {
+  font-size: 0.82rem;
+  color: rgba(255,255,255,0.5);
+  display: flex; align-items: flex-start; gap: 0.5rem;
+}
+.comp-list li::before {
+  content: '→';
+  color: var(--teal);
+  flex-shrink: 0;
+  font-size: 0.75rem;
+  margin-top: 0.1rem;
+}
+
+.comp-connector {
+  display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+}
+.comp-plus {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 3rem;
+  color: var(--teal);
+  line-height: 1;
+}
+.comp-equals {
+  font-size: 0.68rem;
+  color: var(--mid);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  text-align: center;
+  line-height: 1.4;
+}
+
+/* ── FORM SECTION ── */
+.form-section {
+  background: #111111;
+  padding: 6rem 0 8rem;
+}
+
+.form-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5rem;
+  align-items: start;
+}
+
+.form-left .section-kicker {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--teal);
+  margin-bottom: 0.75rem;
+  display: flex; align-items: center; gap: 0.6rem;
+}
+.form-left .section-kicker::before {
+  content: ''; display: block; width: 20px; height: 1px;
+  background: var(--teal);
+}
+
+.form-left .section-title { color: var(--white); margin-bottom: 1.5rem; }
+
+.form-left p {
+  color: rgba(255,255,255,0.65);
+  font-size: 0.92rem;
+  line-height: 1.7;
+  font-weight: 300;
+  margin-bottom: 2.5rem;
+}
+
+.form-perks {
+  display: flex; flex-direction: column; gap: 1rem;
+}
+
+.form-perk {
+  display: flex; align-items: flex-start; gap: 0.75rem;
+}
+.form-perk-icon {
+  width: 1.8rem; height: 1.8rem;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.25);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.8rem;
+  color: var(--white);
+  flex-shrink: 0; margin-top: 0.1rem;
+}
+.form-perk-text {
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.7);
+  line-height: 1.5;
+}
+.form-perk-text strong { color: var(--white); display: block; margin-bottom: 0.1rem; }
+
+/* FORM */
+.form-box {
+  background: #00607A;
+  border: 1px solid rgba(255,255,255,0.06);
+  padding: 2.5rem;
+}
+
+.form-box-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.6rem;
+  color: var(--white);
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.05em;
+}
+
+.form-box-sub {
+  font-size: 0.8rem;
+  color: var(--mid);
+  margin-bottom: 2rem;
+}
+
+.form-group {
+  margin-bottom: 1.25rem;
+}
+
+.form-label {
+  display: block;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--mid);
+  margin-bottom: 0.5rem;
+  font-family: 'DM Mono', monospace;
+}
+
+.form-input, .form-select, .form-textarea {
+  width: 100%;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: var(--white);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.9rem;
+  padding: 0.85rem 1rem;
+  outline: none;
+  transition: border-color 0.2s;
+  appearance: none;
+}
+
+.form-input::placeholder, .form-textarea::placeholder { color: rgba(255,255,255,0.2); }
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+  border-color: var(--teal);
+}
+
+.form-select { cursor: pointer; }
+.form-select option { background: var(--navy); }
+
+.form-textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.form-submit {
+  width: 100%;
+  background: var(--teal);
+  color: var(--white);
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  font-size: 0.9rem;
+  letter-spacing: 0.05em;
+  padding: 1rem;
+  border: none;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  transition: all 0.2s;
+  display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+}
+.form-submit:hover { background: var(--green); color: var(--black); transform: translateY(-2px); }
+
+.form-note {
+  margin-top: 1rem;
+  font-size: 0.72rem;
+  color: rgba(255,255,255,0.25);
+  text-align: center;
+  line-height: 1.5;
+}
+
+/* ── FOOTER ── */
+footer {
+  background: #333333;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  padding: 2rem 3rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.25);
+  flex-wrap: wrap; gap: 1rem;
+}
+
+footer .footer-logo {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1rem;
+  color: var(--green);
+  letter-spacing: 0.15em;
+}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+  nav { padding: 1rem 1.5rem; }
+  .nav-logo-img { display:flex; align-items:center; text-decoration:none; }
+
+.nav-link { display: none; }
+  .nav-tag { display: none; }
+  .hero { padding: 7rem 1.5rem 4rem; }
+  .container { padding: 0 1.5rem; }
+  .commission-inner, .form-inner, .comp-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+  .steps { grid-template-columns: 1fr 1fr; gap: 2rem; }
+  .steps::before { display: none; }
+  .form-row { grid-template-columns: 1fr; }
+  .hero-stats { gap: 2rem; }
+  .why-section, .commission-section, .how-section, .comp-section, .form-section { padding: 4rem 0; }
+  .comp-connector { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="https://agenthumain.fr" class="nav-logo-img"><img src="data:image/png;base64,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" alt="L'Agent Humain" style="height:42px;width:auto;background:#fff;padding:4px 8px;border-radius:4px;display:block;"></a>
+  <div style="display:flex;align-items:center;gap:2rem;">
+    <a href="#avantages" class="nav-link">Avantages</a>
+    <a href="#comment-ca-marche" class="nav-link">Process</a>
+    <a href="#formulaire" class="nav-link">Devenir partenaire</a>
+  </div>
+  <a href="#formulaire" class="nav-cta">Je rejoins le programme →</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div style="position:relative;z-index:1;max-width:1100px;margin:0 auto;width:100%;">
+    <div class="hero-kicker">Programme Partenaire · L'Agent Humain</div>
+    <h1 class="hero-title">
+      350 € / MOIS<br>
+      <span class="accent">PAR PLACEMENT.</span>
+    </h1>
+    <p class="hero-sub">Vous placez des profils managers. Vos clients ont aussi des besoins en back-office. On s'en occupe — et on vous reverse une commission chaque mois.</p>
+    <div class="hero-actions">
+      <a href="#formulaire" class="btn-primary">Devenir partenaire →</a>
+      <a href="#comment-ca-marche" class="btn-secondary">Voir comment ça marche</a>
+    </div>
+  </div>
+</section>
+
+<!-- POURQUOI -->
+<section class="why-section" id="avantages">
+  <div class="container">
+    <div class="section-kicker">Pourquoi ce partenariat</div>
+    <h2 class="section-title" style="color:var(--black);">VOS CLIENTS ONT DES BESOINS<br>QUE VOUS NE COUVREZ PAS.</h2>
+    <p style="color:#555;max-width:560px;font-size:0.95rem;margin-top:0.75rem;font-weight:300;line-height:1.7;">Quand un client vous demande un profil back-office — ADV, support, recouvrement, téléprospection — vous dites non. Avec ce partenariat, vous dites oui. Et vous touchez une commission.</p>
+    <div class="why-grid">
+      <div class="why-card">
+        <div class="why-num">01</div>
+        <div class="why-title">Interlocuteur unique</div>
+        <div class="why-desc">Vous restez le point de contact privilégié du client. Vous référencez. L'Agent Humain gère tout : sélection des talents, déploiement, supervision, reporting.</div>
+      </div>
+      <div class="why-card">
+        <div class="why-num">02</div>
+        <div class="why-title">Zéro concurrence*</div>
+        <div class="why-desc">Vous placez des managers. Nous plaçons du back-office. Même client final, besoins différents. On ne marche pas sur vos plates-bandes.</div>
+      </div>
+      <div class="why-card">
+        <div class="why-num">03</div>
+        <div class="why-title">Offre élargie à vos clients</div>
+        <div class="why-desc">Vous devenez l'interlocuteur qui couvre plus de besoins. Un cabinet qui peut répondre à plus de sujets = un cabinet qui fidélise mieux.</div>
+      </div>
+      <div class="why-card">
+        <div class="why-num">04</div>
+        <div class="why-title">Revenus passifs réels</div>
+        <div class="why-desc">350€ par mois par ressource placée. Automatique. Sans effort commercial supplémentaire de votre part. Vous parlez, on déploie, vous encaissez.</div>
+      </div>
+    </div>
+    <p style="margin-top:1.5rem;font-size:0.78rem;color:#888;font-style:italic;">* Une clause de non-concurrence stricte protège votre portefeuille client.</p>
+  </div>
+</section>
+<section class="commission-section">
+  <div class="container">
+    <div class="commission-inner">
+      <div class="commission-left">
+        <div class="section-kicker">La commission</div>
+        <h2 class="section-title">CE QUE VOUS<br>GAGNEZ CONCRÈTEMENT.</h2>
+        <p>Un modèle simple, transparent, basé sur la performance. Vous touchez 350€ par mois pour chaque ressource back-office placée chez l'un de vos clients via L'Agent Humain.</p>
+        <a href="#formulaire" class="btn-primary" style="display:inline-flex;">Devenir Partenaire →</a>
+      </div>
+      <div class="commission-card">
+        <div class="commission-amount">350€</div>
+        <div class="commission-period">Par ressource placée · Par mois</div>
+        <div class="commission-divider"></div>
+        <div class="commission-row">
+          <span class="cr-label">1 client avec 1 ressource</span>
+          <span class="cr-value highlight">350€ / mois</span>
+        </div>
+        <div class="commission-row">
+          <span class="cr-label">3 clients avec 1 ressource chacun</span>
+          <span class="cr-value highlight">1 050€ / mois</span>
+        </div>
+        <div class="commission-row">
+          <span class="cr-label">5 clients avec 1 ressource chacun</span>
+          <span class="cr-value highlight">1 750€ / mois</span>
+        </div>
+        <div class="commission-row">
+          <span class="cr-label">Annualisé sur 5 clients</span>
+          <span class="cr-value highlight">21 000€ / an</span>
+        </div>
+        <div class="commission-divider"></div>
+        <div class="commission-row">
+          <span class="cr-label">Effort requis de votre part</span>
+          <span class="cr-value">1 mention à votre client</span>
+        </div>
+        <div class="commission-row">
+          <span class="cr-label">Gestion opérationnelle</span>
+          <span class="cr-value">L'Agent Humain</span>
+        </div>
+        <div class="commission-row">
+          <span class="cr-label">Engagement minimum</span>
+          <span class="cr-value">Aucun</span>
+        </div>
+        <div class="commission-note">
+          Commission versée mensuellement, tant que la mission est active. Aucun plafond. Aucune limite de volume.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMMENT ÇA MARCHE -->
+<section class="how-section" id="comment-ca-marche">
+  <div class="container">
+    <div class="section-kicker">Le process</div>
+    <h2 class="section-title" style="color:var(--white);">4 ÉTAPES.<br>ZÉRO COMPLEXITÉ.</h2>
+    <p class="how-section__sub" style="color:rgba(255,255,255,0.4);font-size:0.95rem;max-width:480px;font-weight:300;margin-bottom:4rem;">De la signature du partenariat au premier virement. Voici exactement ce qui se passe.</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <div class="step-title">Vous signez l'accord</div>
+        <div class="step-desc">Un document simple. Conditions claires. Aucun engagement de volume.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <div class="step-title">Vous évoquez AH à vos clients</div>
+        <div class="step-desc">Naturellement, quand un besoin back-office remonte. Une phrase suffit.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <div class="step-title">L'Agent Humain déploie</div>
+        <div class="step-desc">On prend en charge tout le cycle. Sélection, déploiement, supervision. Vous ne gérez rien.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">04</div>
+        <div class="step-title">Vous recevez la commission</div>
+        <div class="step-desc">350€/mois par ressource active. Versement mensuel automatique.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPLÉMENTARITÉ -->
+<section class="comp-section">
+  <div class="container">
+    <div class="section-kicker">Complémentarité</div>
+    <h2 class="section-title">VOUS + NOUS =<br>UNE OFFRE COMPLÈTE.</h2>
+    <p class="section-sub">Le même client final. Des besoins différents. Pas de chevauchement. Que de la valeur ajoutée.</p>
+    <div class="comp-grid">
+      <div class="comp-card you">
+        <div class="comp-card-label">Votre cabinet</div>
+        <div class="comp-card-title">PROFILS MANAGERS</div>
+        <ul class="comp-list">
+          <li>Directeurs et cadres dirigeants</li>
+          <li>Managers opérationnels</li>
+          <li>Profils de transformation</li>
+          <li>Recrutement permanent</li>
+          <li>Chasse de têtes spécialisée</li>
+        </ul>
+      </div>
+      <div class="comp-connector">
+        <div class="comp-plus">+</div>
+        <div class="comp-equals">MÊME CLIENT<br>FINAL</div>
+      </div>
+      <div class="comp-card us">
+        <div class="comp-card-label">L'Agent Humain</div>
+        <div class="comp-card-title">BACK-OFFICE EXTERNALISÉ</div>
+        <ul class="comp-list">
+          <li>Administration des ventes</li>
+          <li>Support client multicanal</li>
+          <li>Téléprospection & BizDev</li>
+          <li>Recouvrement de créances</li>
+          <li>Assistants commerciaux</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FORMULAIRE -->
+<section class="form-section" id="formulaire">
+  <div class="container">
+    <div class="form-inner">
+      <div class="form-left">
+        <div class="section-kicker">Devenir partenaire</div>
+        <h2 class="section-title">REJOINDRE<br>LE PROGRAMME.</h2>
+        <p>Remplissez ce formulaire. L'équipe vous recontacte sous 24h pour vous présenter les conditions du partenariat et répondre à vos questions.</p>
+        <p style="font-weight:600;color:var(--teal);font-size:0.9rem;margin-top:1.5rem;margin-bottom:0.5rem;">Un partenariat fondé sur la fluidité</p>
+        <div class="form-perks">
+          <div class="form-perk">
+            <div class="form-perk-icon">✓</div>
+            <div class="form-perk-text">
+              <strong>Réactivité de l'équipe (24h)</strong>
+              Nos experts vous recontactent personnellement sous 24h
+            </div>
+          </div>
+          <div class="form-perk">
+            <div class="form-perk-icon">✓</div>
+            <div class="form-perk-text">
+              <strong>Accord "One-Page" (Sans Jargon)</strong>
+              Un document simple, clair et transparent.
+            </div>
+          </div>
+          <div class="form-perk">
+            <div class="form-perk-icon">✓</div>
+            <div class="form-perk-text">
+              <strong>Liberté totale (Zéro Quota)</strong>
+              Aucun engagement de volume ni de durée.
+            </div>
+          </div>
+          <div class="form-perk">
+            <div class="form-perk-icon">✓</div>
+            <div class="form-perk-text">
+              <strong>Marge nette immédiate (350€/mois)</strong>
+              Commission générée dès le premier placement.
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-box">
+        <div class="form-box-title">Je souhaite devenir partenaire</div>
+        <div class="form-box-sub">Remplissez ce formulaire — réponse sous 24h.</div>
+        <form>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Prénom *</label>
+              <input type="text" class="form-input" placeholder="Jean">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Nom *</label>
+              <input type="text" class="form-input" placeholder="Dupont">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Cabinet / Société *</label>
+            <input type="text" class="form-input" placeholder="Nom de votre cabinet">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email professionnel *</label>
+            <input type="email" class="form-input" placeholder="jean@cabinet.fr">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Téléphone</label>
+            <input type="tel" class="form-input" placeholder="+33 6 00 00 00 00">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Taille de votre cabinet</label>
+            <select class="form-select form-input">
+              <option value="" disabled selected>Sélectionner</option>
+              <option>1 à 5 personnes</option>
+              <option>6 à 15 personnes</option>
+              <option>16 à 50 personnes</option>
+              <option>+ de 50 personnes</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Un mot sur votre activité (optionnel)</label>
+            <textarea class="form-textarea form-input" placeholder="Votre spécialisation, vos marchés cibles, une question sur le partenariat..."></textarea>
+          </div>
+          <button type="submit" class="form-submit">
+            Envoyer ma demande →
+          </button>
+          <p class="form-note">En soumettant ce formulaire, vous acceptez d'être recontacté par L'Agent Humain dans le cadre de ce partenariat. Aucun engagement de votre part.</p>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo"><img src="data:image/png;base64,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" alt="L'Agent Humain" style="height:36px;width:auto;background:#fff;padding:3px 8px;border-radius:4px;display:block;"></div>
+  <div>Marseille · Antananarivo · agenthumain.fr</div>
+  <div>Contactez-nous · © 2026 L'Agent Humain — Tous droits réservés</div>
+</footer>
+
+</body>
+</html>
